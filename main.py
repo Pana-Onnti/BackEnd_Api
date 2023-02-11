@@ -1,10 +1,11 @@
 from fastapi import FastAPI, APIRouter,Depends,HTTPException
 from typing import Union
-from db.models.database import Base,engine, get_db
+from db.database import Base,engine, get_db
 from sqlalchemy.orm import Session
-from db.models.usuario import Usuario,Cuenta,Trade
-from model import UsuarioCreate
 from fastapi import status
+from db.models.models import Usuario
+from schemas.schemas import *
+
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
@@ -13,21 +14,31 @@ create_tables()
 
 app = FastAPI()
 
-@app.get("/")
-def read_root(db:Session = Depends(get_db)):
-    data = db.query(Usuario).all()
-   
-    return data,asd,asd1
-@app.post('/')
+#@app.get("/2")
+#def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#    users = db.query(Usuario).offset(skip).limit(limit).all()
+#    return users
+
+
+
+@app.post("/", response_model=UsuarioCreate)
 async def create_user(usuario: UsuarioCreate, db: Session = Depends(get_db)):
-    existe_usuario = db.query(Usuario).filter(Usuario.Email == usuario.Email).first()
+   user = Usuario(**usuario.dict())
+   db.add(user)
+   db.commit()
+   db.refresh(user)
+   return user
+class UsuarioOut(BaseModel):
+    Id: int
+    Nombre: str
+    Apellido: str
+    User_name: str
+    Email: str
 
-
-    if existe_usuario:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='El usuario con ese correo electrónico ya existe.')
-
-    new_usuario = Usuario(**usuario.dict())
-    db.add(new_usuario)
-    db.commit()
-    db.refresh(new_usuario)
-    return {"message": "Usuario creado"}
+@app.get("/usuarios/")
+def get_usuario_by_email(email: str, db: Session = Depends(get_db)):
+    usuario = db.query(Usuario).filter(Usuario.Email == email).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return UsuarioOut(Id=usuario.Id, Nombre=usuario.Nombre, Apellido=usuario.Apellido,
+                      User_name=usuario.User_name, Email=usuario.Email).dict()
