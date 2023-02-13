@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from db.models.models import Usuario,Cuenta,Trade
-from schemas.schemas import UsuarioCreate,CuentaCreate
+from db.schemas.schemas import UsuarioCreate,CuentaCreate
 #operacion sobre usuario
 def get_user(db:Session,usuario_id:int):
     return db.query(Usuario).filter(Usuario.Id == usuario_id).first()
