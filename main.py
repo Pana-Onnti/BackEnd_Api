@@ -1,10 +1,10 @@
-from fastapi import FastAPI, APIRouter,Depends,HTTPException
-from typing import Union
-from db.models.database import Base,engine, get_db
+from fastapi import FastAPI,Depends
+from db.database import Base,engine
 from sqlalchemy.orm import Session
-from db.models.usuario import Usuario,Cuenta,Trade
-from model import UsuarioCreate
-from fastapi import status
+from routes import usuarios_route 
+from routes import cuentas_router
+from routes import trades_router
+
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
@@ -13,21 +13,58 @@ create_tables()
 
 app = FastAPI()
 
+app.include_router(usuarios_route.router)
+app.include_router(cuentas_router.router)
+app.include_router(trades_router.router)
+
+
+
 @app.get("/")
-def read_root(db:Session = Depends(get_db)):
-    data = db.query(Usuario).all()
-   
-    return data,asd,asd1
-@app.post('/')
-async def create_user(usuario: UsuarioCreate, db: Session = Depends(get_db)):
-    existe_usuario = db.query(Usuario).filter(Usuario.Email == usuario.Email).first()
+async def root():
+    return {"message": "Hello Bigger Applications!"}
 
 
-    if existe_usuario:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='El usuario con ese correo electrónico ya existe.')
 
-    new_usuario = Usuario(**usuario.dict())
-    db.add(new_usuario)
-    db.commit()
-    db.refresh(new_usuario)
-    return {"message": "Usuario creado"}
+
+
+
+
+
+
+#@app.post("/usuar/", response_model=UsuarioCreate)
+#def create_user(usuario: UsuarioCreate, db: Session = Depends(get_db)):
+#   
+#    def db_add(usuario_add,db: Session = Depends(get_db)):
+#        db.add(usuario_add)
+#        db.commit()
+#        db.refresh(usuario_add)
+#        return usuario_add
+#
+#@app.post("/usuario/", response_model=UsuarioCreate)
+#async def create_user(usuario: UsuarioCreate, db: Session = Depends(get_db)):
+#   user = Usuario(**usuario.dict())
+#   db.add(user)
+#   db.commit()
+#   db.refresh(user)
+#   return user
+#
+#
+#
+#
+#@app.get("/usuario/{email}")
+#def get_usuario_by_email(email: str, db: Session = Depends(get_db)):
+#    usuario = db.query(Usuario).filter(Usuario.Email == email).first()
+#    if not usuario:
+#        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+#    return UsuarioOut(Id=usuario.Id, Nombre=usuario.Nombre, Apellido=usuario.Apellido,
+#                      User_name=usuario.User_name, Email=usuario.Email).dict()
+#
+#
+#@ app.get("/usuarios/{email}")
+#def get_usuarios_by_email(email: str, db: Session = Depends(get_db)):
+#    usuarios = db.query(Usuario).filter(Usuario.Email == email).all()
+#    if not usuarios:
+#        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+#    return [UsuarioOut(Id=usuario.Id, Nombre=usuario.Nombre, Apellido=usuario.Apellido,
+#                      User_name=usuario.User_name, Email=usuario.Email).dict() for usuario in usuarios]
+#
