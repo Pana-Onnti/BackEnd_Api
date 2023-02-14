@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import Union
 
 class UsuarioCreate(BaseModel):
     Nombre: str
@@ -11,11 +11,16 @@ class UsuarioCreate(BaseModel):
         orm_mode = True
         
 class UsuarioOut(BaseModel):
-    Id: int
-    Nombre: str
-    Apellido: str
+    Id: Union[int, None] = None
+    Nombre: Union[str, None] = None
+    Apellido: Union[str, None] = None
     User_name: str
-    Email: str
+    Email: Union[str, None] = None
+
+
+class UserInDB(UsuarioOut):
+    Password: str
+
 
 
 #@app.post("/usuar/", response_model=UsuarioCreate)

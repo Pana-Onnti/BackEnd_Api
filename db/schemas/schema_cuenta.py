@@ -12,6 +12,7 @@ class CuentaOut:
             'Id_Estado': self.Id_Estado,
             'Balance': self.Balance
         }
+
 class Cuentas(BaseModel):
     
     Id_Estado: int

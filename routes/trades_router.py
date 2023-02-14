@@ -23,20 +23,20 @@ async def crear_trade(trade:TradeCreate,db:Session=Depends(get_db)):
 
 #Devolver todos los trades#
 @router.get("/trades")
-def get_trades(db: Session = Depends(get_db)):
+async def get_trades(db: Session = Depends(get_db)):
     trades = db.query(Trade).all()
     return [TradeOut(**trade.__dict__).dict() for trade in trades]
 
 ## fecha de entrada es cualquier propiedad
 
 @router.get("/{Fecha_Entrada}/")
-def get_fechas_entrada(db: Session = Depends(get_db)):
+async def get_fechas_entrada(db: Session = Depends(get_db)):
     trades = db.query(Trade).all()
     fechas = [trade.Fecha_Entrada for trade in trades]
     return JSONResponse(content={"fechas": fechas})
 
 @router.get("/trades/{attribute}")
-def get_trade_attribute(attribute: str, db: Session = Depends(get_db)):
+async def get_trade_attribute(attribute: str, db: Session = Depends(get_db)):
     trades = db.query(Trade).all()
     filtered_attribute = [getattr(trade, attribute) for trade in trades]
     return JSONResponse(content={"attribute": filtered_attribute})
