@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 #set endpoint
 router = APIRouter(
     prefix="/trades",
-    tags=["usuarios"],
+    tags=["Trades"],
     responses={404: {"description": "Not found"}},
 )
 # Crear #

@@ -16,6 +16,9 @@ class UsuarioOut(BaseModel):
     Apellido: Union[str, None] = None
     User_name: str
     Email: Union[str, None] = None
+    Password : Union[str, None] = None
+    class Config:
+        orm_mode = True
 
 
 class UserInDB(UsuarioOut):
