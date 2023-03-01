@@ -52,10 +52,7 @@ def authenticate_user(username:str, password:str , db: Session = Depends(get_db)
     #if not verify_password(password,user.Password):
     #    print (password , user.Password)
     #    return False
-   
     return user
-
-
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()

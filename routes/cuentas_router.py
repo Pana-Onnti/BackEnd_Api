@@ -7,13 +7,13 @@ from db.models.models import Cuenta
 # set endpoint
 router = APIRouter(
     prefix="/cuentas",
-    tags=["usuarios"],
+    tags=["Cuentas"],
     responses={404: {"description": "Not found"}},
 )
 
 # Crear #
 @router.post("/crear/",response_model=CuentaCreate)
-def get_cuentas(cuenta: CuentaCreate,db: Session = Depends(get_db)): 
+def create_cuenta(cuenta: CuentaCreate,db: Session = Depends(get_db)): 
     db_cuenta = Cuenta(**cuenta.dict())
     db.add(db_cuenta)
     db.commit()
@@ -22,7 +22,7 @@ def get_cuentas(cuenta: CuentaCreate,db: Session = Depends(get_db)):
 
 # Devolver Todas las Cuentas#
 @router.get("/cuentas/")
-def create_cuenta( db: Session = Depends(get_db)):
+def buscar_cuentas( db: Session = Depends(get_db)):
     cuentas = db.query(Cuenta).all()
     return [CuentaOut(Id=cuenta.Id,
                      Id_Estado=cuenta.Id_Estado,
