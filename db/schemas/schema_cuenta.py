@@ -12,11 +12,13 @@ class CuentaOut:
             'Id_Estado': self.Id_Estado,
             'Balance': self.Balance
         }
-
+    class Config:
+        orm_mode = True
+        
 
 
 class Cuentas(BaseModel):
-    
+    Id :int
     Id_Estado: int
     Id_Usuario: int
     Balance: int
@@ -26,7 +28,9 @@ class Cuentas(BaseModel):
 
 class CuentasUsuario(BaseModel):
     cuentas:list[Cuentas]
-
+    class Config:
+        orm_mode = True
+        
 
 class CuentaCreate(BaseModel):
     

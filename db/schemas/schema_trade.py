@@ -1,17 +1,20 @@
 from pydantic import BaseModel
-class TradeCreate(BaseModel):
+from typing import Optional
+
+class TradeDict(BaseModel):
     Fecha_Entrada: int
-    Fecha_Salida: int
-    Direccion: int
+    Fecha_Salida: Optional[int]
     Precio_Entrada: float
-    Precio_Salida: float
+    Direccion: int
+    Precio_Salida: Optional[float]
     Comision: float
-    Id_Notas: int
+    Id_Notas: Optional[int]
     Estado: int
     Id_Cuenta: int
+
     class Config:
         orm_mode = True
-        
+
 class TradeOut(BaseModel):
     Id: int
     Fecha_Entrada: int
@@ -23,3 +26,7 @@ class TradeOut(BaseModel):
     Id_Notas: int
     Estado: int
     Id_Cuenta: int
+
+
+class Email(BaseModel):
+    email:str
