@@ -11,14 +11,13 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 # Crear #
-
-
-
 @router.post('/crear/',response_model=TradeDict) 
 async def crear_trade(email:str,trade:TradeDict,db:Session=Depends(get_db)):
-    usuario = validar_usuario_cuenta(db,email)
+    validar_usuario_cuenta(db,email)
     db_trade = trade_nuevo(db,trade,email)
     return db_trade
+
+
 
 
 @router.get("/obtener-trades-cuenta")

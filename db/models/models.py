@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,Float , ForeignKey,Boolean
+from sqlalchemy import Column, Integer, String,Float , ForeignKey,Boolean,DateTime
 from db.database import Base
 from sqlalchemy.orm import relationship
 
@@ -28,17 +28,18 @@ class Cuenta(Base):
 class Trade(Base):
     __tablename__ = "Trades"
     Id = Column(Integer, primary_key=True, autoincrement=True)
-    Fecha_Entrada = Column(Integer)
-    Fecha_Salida = Column(Integer)
+    Ticker = Column(String)
+    Fecha_Entrada = Column(DateTime)
+    Fecha_Salida = Column(DateTime)
     Precio_Entrada = Column(Float(asdecimal=True))
-    Direccion = Column(Integer)
     Precio_Salida = Column(Float(asdecimal=True))
+    Direccion = Column(Integer)
     Comision = Column(Float(asdecimal=True))
     Id_Notas = Column(Integer)
     Estado = Column(Integer)
-
     Id_Cuenta = Column(Integer,ForeignKey('Cuentas.Id'))
     cuenta = relationship('Cuenta',back_populates='trades')
+
 
 
 

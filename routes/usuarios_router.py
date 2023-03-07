@@ -3,8 +3,6 @@ from db.database import get_db
 from db.models.models import Usuario
 from db.schemas.schema_usuario import *
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
-#pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 from crud import *
 from http_exceptions import *
 
@@ -13,19 +11,13 @@ router = APIRouter(
     tags=["Usuarios"],
     responses={404: {"description": "Not found"}},
 )
-#    usuario_db.Password = password
-#   password = pwd_context.hash(usuario.Password)
 
-
-@router.post('/crear/',response_model=UsuarioCreate)
-async def agregar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)) -> Usuario:
-    await validar_usuario_nuevo(usuario, db)
-    usuario = Usuario(**usuario.dict())
-    db.add(usuario)
-    db.commit()
-    db.refresh(usuario)
-    return usuario
-
+@router.post('/crear/', response_model=UsuarioOut)
+async def crear_usuario_nuevo(usuario:UsuarioCreate,db:Session=Depends(get_db)):
+    await validar_usuario_nuevo(usuario,db)
+    nuevo_usuario = hash_pw(usuario)
+    nuevo_usuario = crear_usuario(db,nuevo_usuario)
+    return nuevo_usuario
 
 @router.get('buscar/{email}/',response_model=UsuarioOut)
 async def obtener_usuario_por_email(email: str, db: Session = Depends(get_db)):
