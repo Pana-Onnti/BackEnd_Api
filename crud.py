@@ -23,9 +23,8 @@ def validar_usuario_cuentas_creadas(db: Session, email: str) -> Usuario:
     return usuario
 
 def crear_cuenta(db: Session, cuenta: CuentaCreate, usuario: Usuario) -> Cuenta:
-    cuenta.Id_Usuario = usuario.Id
     cuenta.Id_Estado = 1
-    db_cuenta = Cuenta(**cuenta.dict())
+    db_cuenta = Cuenta(**cuenta.dict(),Id_Usuario=usuario.Id)
     db.add(db_cuenta)
     db.commit()
     db.refresh(db_cuenta)

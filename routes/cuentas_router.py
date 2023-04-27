@@ -17,7 +17,7 @@ router = APIRouter(
 # Operaciones
 
 
-@router.post('/crear/{email}')
+@router.post('/crear/')
 async def crear_cuenta_por_usuario(email: str, cuenta: CuentaCreate, db: Session = Depends(get_db)):
     usuario = validar_usuario_cuentas_creadas(db, email)
     db_cuenta = crear_cuenta(db, cuenta, usuario)

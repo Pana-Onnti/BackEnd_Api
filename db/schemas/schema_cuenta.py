@@ -35,7 +35,6 @@ class CuentasUsuario(BaseModel):
 class CuentaCreate(BaseModel):
     
     Id_Estado: int
-    Id_Usuario: int
     Balance: int
     
     class Config:

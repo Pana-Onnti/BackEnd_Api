@@ -17,11 +17,8 @@ async def crear_trade(email:str,trade:TradeDict,db:Session=Depends(get_db)):
     db_trade = trade_nuevo(db,trade,email)
     return db_trade
 
-
-
-
-@router.get("/obtener-trades-cuenta")
-async def obtener_trades_cuenta(email: str, db: Session = Depends(get_db)):
+@router.get("/buscar/{email}")
+async def obtener_trades_por_email(email: str, db: Session = Depends(get_db)):
     usuario = obtener_usuario_por_email_db(db, email)
     if usuario is None:
         return {"mensaje": "Usuario no encontrado"}
@@ -30,9 +27,6 @@ async def obtener_trades_cuenta(email: str, db: Session = Depends(get_db)):
         trades_cuenta = [TradeDict.from_orm(trade) for trade in cuenta.trades]
         trades.append(trades_cuenta)
     return trades
- 
-
-
 
 #
 #
